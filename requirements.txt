@@ -1,0 +1,9 @@
+beautifulsoup4==4.6.0
+bs4==0.0.1
+certifi==2018.4.16
+chardet==3.0.4
+idna==2.7
+lxml==4.2.3
+PySide2==5.11.1a1.dev1530005708
+requests==2.19.1
+urllib3==1.23
