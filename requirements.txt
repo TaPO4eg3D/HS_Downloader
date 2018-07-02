@@ -1,9 +1,16 @@
+altgraph==0.15
 beautifulsoup4==4.6.0
 bs4==0.0.1
 certifi==2018.4.16
 chardet==3.0.4
+future==0.16.0
 idna==2.7
 lxml==4.2.3
+macholib==1.9
+pefile==2017.11.5
+PyInstaller==3.3.1
+pypiwin32==223
 PySide2==5.11.1a1.dev1530005708
+pywin32==223
 requests==2.19.1
 urllib3==1.23
