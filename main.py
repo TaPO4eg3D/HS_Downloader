@@ -47,6 +47,7 @@ class AnimeShow(QListWidgetItem):
     def __repr__(self):
         return '{} - {}'.format(self.title, self.show_link)
 
+
 class Episode(QListWidgetItem):
     
     def __init__(self, title, magnet):
@@ -90,6 +91,7 @@ def get_episodes(show, quality=1080):
 
         next_iter += 1
 
+
 def matched_shows(search):
     html = requests.get(ALL_SHOWS).text
     soup = BeautifulSoup(html, 'lxml')
@@ -117,7 +119,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     def fill_table(self):
         self.animeView.clear()
-        if(self.searchField.toPlainText() == ''):
+        if self.searchField.toPlainText() == '':
             return
         shows = matched_shows(self.searchField.toPlainText())
         for show in shows:
@@ -140,6 +142,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     def deselect_all(self):
         self.animeView.clearSelection()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
