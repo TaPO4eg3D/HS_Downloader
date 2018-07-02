@@ -1,5 +1,5 @@
 import re
-import os, sys, subprocess, time
+import os, sys, subprocess, threading
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
@@ -131,7 +131,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def fill_table(self):
         self.animeView.clear()
+        thread = threading.Thread(target=self.fill_table_thread)
+        thread.start()
         self.loadingStatus.setVisible(True)
+    
+    def fill_table_thread(self):
         if self.searchField.text() == '':
             return
         shows = matched_shows(self.searchField.text())
@@ -140,10 +144,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.loadingStatus.setVisible(False)
 
     def display_episodes(self):
-        selected_item = self.animeView.selectedItems()[0]
-        self.animeView.clear()
+        thread = threading.Thread(target=self.display_episodes_thread)
+        thread.start()
         self.loadingStatus.setVisible(True)
+    
+    def display_episodes_thread(self):
+        selected_item = self.animeView.selectedItems()[0]
         episodes = get_episodes(selected_item.show_link)
+        self.animeView.clear()
         for episode in episodes:
             self.animeView.addItem(episode)
         self.loadingStatus.setVisible(False)
