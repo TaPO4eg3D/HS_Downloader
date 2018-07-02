@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'MainWindow.ui',
 # licensing of 'MainWindow.ui' applies.
 #
-# Created: Mon Jul  2 12:41:26 2018
+# Created: Mon Jul  2 19:40:25 2018
 #      by: pyside2-uic  running on PySide2 5.11.1a1.dev1530005708
 #
 # WARNING! All changes made in this file will be lost!
@@ -16,20 +16,17 @@ class Ui_MainWindow(object):
         MainWindow.resize(475, 263)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.searchField = QtWidgets.QTextEdit(self.centralwidget)
-        self.searchField.setGeometry(QtCore.QRect(10, 10, 321, 31))
-        self.searchField.setObjectName("searchField")
         self.searchButton = QtWidgets.QPushButton(self.centralwidget)
-        self.searchButton.setGeometry(QtCore.QRect(340, 10, 121, 41))
+        self.searchButton.setGeometry(QtCore.QRect(340, 10, 121, 31))
         self.searchButton.setObjectName("searchButton")
         self.selectAll = QtWidgets.QPushButton(self.centralwidget)
-        self.selectAll.setGeometry(QtCore.QRect(340, 70, 121, 31))
+        self.selectAll.setGeometry(QtCore.QRect(340, 55, 121, 31))
         self.selectAll.setObjectName("selectAll")
         self.deselectAll = QtWidgets.QPushButton(self.centralwidget)
-        self.deselectAll.setGeometry(QtCore.QRect(340, 105, 121, 31))
+        self.deselectAll.setGeometry(QtCore.QRect(340, 90, 121, 31))
         self.deselectAll.setObjectName("deselectAll")
         self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setGeometry(QtCore.QRect(340, 60, 118, 3))
+        self.line.setGeometry(QtCore.QRect(340, 50, 118, 3))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
@@ -42,6 +39,20 @@ class Ui_MainWindow(object):
         self.animeView = QtWidgets.QListWidget(self.centralwidget)
         self.animeView.setGeometry(QtCore.QRect(10, 50, 321, 201))
         self.animeView.setObjectName("animeView")
+        self.searchField = QtWidgets.QLineEdit(self.centralwidget)
+        self.searchField.setGeometry(QtCore.QRect(10, 10, 321, 31))
+        self.searchField.setObjectName("searchField")
+        self.loadingStatus = QtWidgets.QLabel(self.centralwidget)
+        self.loadingStatus.setEnabled(True)
+        self.loadingStatus.setGeometry(QtCore.QRect(340, 160, 121, 20))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(11)
+        font.setWeight(75)
+        font.setBold(True)
+        self.loadingStatus.setFont(font)
+        self.loadingStatus.setAlignment(QtCore.Qt.AlignCenter)
+        self.loadingStatus.setObjectName("loadingStatus")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -49,10 +60,10 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "HS: Downloader", None, -1))
-        self.searchField.setToolTip(QtWidgets.QApplication.translate("MainWindow", "Insert here the name of anime", None, -1))
         self.searchButton.setText(QtWidgets.QApplication.translate("MainWindow", "Search", None, -1))
         self.selectAll.setText(QtWidgets.QApplication.translate("MainWindow", "Select all", None, -1))
         self.deselectAll.setText(QtWidgets.QApplication.translate("MainWindow", "Deselect all", None, -1))
         self.downloadButton.setText(QtWidgets.QApplication.translate("MainWindow", "Download", None, -1))
         self.showEpisodes.setText(QtWidgets.QApplication.translate("MainWindow", "Display episodes", None, -1))
+        self.loadingStatus.setText(QtWidgets.QApplication.translate("MainWindow", "Loading...", None, -1))
 

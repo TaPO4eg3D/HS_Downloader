@@ -14,26 +14,13 @@
    <string>HS: Downloader</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextEdit" name="searchField">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>321</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>Insert here the name of anime</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="searchButton">
     <property name="geometry">
      <rect>
       <x>340</x>
       <y>10</y>
       <width>121</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
@@ -44,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>340</x>
-      <y>70</y>
+      <y>55</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -57,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>340</x>
-      <y>105</y>
+      <y>90</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -70,7 +57,7 @@
     <property name="geometry">
      <rect>
       <x>340</x>
-      <y>60</y>
+      <y>50</y>
       <width>118</width>
       <height>3</height>
      </rect>
@@ -113,6 +100,43 @@
       <width>321</width>
       <height>201</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="searchField">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>321</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="loadingStatus">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>160</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Loading...</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

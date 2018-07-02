@@ -1,8 +1,9 @@
 import re
-import os, sys, subprocess
+import os, sys, subprocess, time
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
+from PySide2.QtXml import QDomNode
 
 import requests
 from bs4 import BeautifulSoup
@@ -110,27 +111,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.loadingStatus.setVisible(False)
+
         self.animeView.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.animeView.doubleClicked.connect(self.display_episodes)
+        self.searchField.installEventFilter(self)
         self.searchButton.clicked.connect(self.fill_table)
         self.showEpisodes.clicked.connect(self.display_episodes)
         self.downloadButton.clicked.connect(self.download_selected)
         self.selectAll.clicked.connect(self.select_all)
         self.deselectAll.clicked.connect(self.deselect_all)
     
+    def eventFilter(self, widget, event):
+        if event.type() == QEvent.KeyPress and widget is self.searchField:
+            key = event.key()
+            if key == Qt.Key_Return:
+                self.fill_table()
+        return QWidget.eventFilter(self, widget, event)
+
     def fill_table(self):
         self.animeView.clear()
-        if self.searchField.toPlainText() == '':
+        self.loadingStatus.setVisible(True)
+        if self.searchField.text() == '':
             return
-        shows = matched_shows(self.searchField.toPlainText())
+        shows = matched_shows(self.searchField.text())
         for show in shows:
             self.animeView.addItem(show)
+        self.loadingStatus.setVisible(False)
 
     def display_episodes(self):
         selected_item = self.animeView.selectedItems()[0]
-        episodes = get_episodes(selected_item.show_link)
         self.animeView.clear()
+        self.loadingStatus.setVisible(True)
+        episodes = get_episodes(selected_item.show_link)
         for episode in episodes:
             self.animeView.addItem(episode)
+        self.loadingStatus.setVisible(False)
     
     def download_selected(self):
         items = self.animeView.selectedItems()
