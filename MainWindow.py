@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'MainWindow.ui',
 # licensing of 'MainWindow.ui' applies.
 #
-# Created: Fri Jun 29 15:35:34 2018
+# Created: Mon Jul  2 12:41:26 2018
 #      by: pyside2-uic  running on PySide2 5.11.1a1.dev1530005708
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,12 +13,9 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(473, 265)
+        MainWindow.resize(475, 263)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.animeView = QtWidgets.QTableView(self.centralwidget)
-        self.animeView.setGeometry(QtCore.QRect(10, 51, 321, 201))
-        self.animeView.setObjectName("animeView")
         self.searchField = QtWidgets.QTextEdit(self.centralwidget)
         self.searchField.setGeometry(QtCore.QRect(10, 10, 321, 31))
         self.searchField.setObjectName("searchField")
@@ -39,9 +36,12 @@ class Ui_MainWindow(object):
         self.downloadButton = QtWidgets.QPushButton(self.centralwidget)
         self.downloadButton.setGeometry(QtCore.QRect(340, 220, 121, 31))
         self.downloadButton.setObjectName("downloadButton")
-        self.downloadButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.downloadButton_2.setGeometry(QtCore.QRect(340, 185, 121, 31))
-        self.downloadButton_2.setObjectName("downloadButton_2")
+        self.showEpisodes = QtWidgets.QPushButton(self.centralwidget)
+        self.showEpisodes.setGeometry(QtCore.QRect(340, 185, 121, 31))
+        self.showEpisodes.setObjectName("showEpisodes")
+        self.animeView = QtWidgets.QListWidget(self.centralwidget)
+        self.animeView.setGeometry(QtCore.QRect(10, 50, 321, 201))
+        self.animeView.setObjectName("animeView")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -54,5 +54,5 @@ class Ui_MainWindow(object):
         self.selectAll.setText(QtWidgets.QApplication.translate("MainWindow", "Select all", None, -1))
         self.deselectAll.setText(QtWidgets.QApplication.translate("MainWindow", "Deselect all", None, -1))
         self.downloadButton.setText(QtWidgets.QApplication.translate("MainWindow", "Download", None, -1))
-        self.downloadButton_2.setText(QtWidgets.QApplication.translate("MainWindow", "Display episodes", None, -1))
+        self.showEpisodes.setText(QtWidgets.QApplication.translate("MainWindow", "Display episodes", None, -1))
 

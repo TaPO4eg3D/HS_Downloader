@@ -6,24 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>473</width>
-    <height>265</height>
+    <width>475</width>
+    <height>263</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>HS: Downloader</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTableView" name="animeView">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>51</y>
-      <width>321</width>
-      <height>201</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QTextEdit" name="searchField">
     <property name="geometry">
      <rect>
@@ -102,7 +92,7 @@
      <string>Download</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="downloadButton_2">
+   <widget class="QPushButton" name="showEpisodes">
     <property name="geometry">
      <rect>
       <x>340</x>
@@ -113,6 +103,16 @@
     </property>
     <property name="text">
      <string>Display episodes</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="animeView">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>321</width>
+      <height>201</height>
+     </rect>
     </property>
    </widget>
   </widget>
