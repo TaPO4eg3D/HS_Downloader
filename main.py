@@ -1,4 +1,6 @@
 import re
+import asyncio
+import aiohttp
 import os, sys, subprocess, threading
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import *
@@ -63,7 +65,35 @@ class Episode(QListWidgetItem):
         return '{} - {}'.format(self.title, self.magnet)
 
 
-def get_episodes(show, quality=1080):
+async def fetch_html(session, link):
+    async with session.get(link) as response:
+        return await response.text()
+
+
+async def fetch_links(show, show_id, next_iter, quality=1080):
+
+    result = list()
+
+    async with aiohttp.ClientSession() as session:
+        api = API_URL.format(show_id, next_iter)
+        html = await fetch_html(session, api)
+
+    soup = BeautifulSoup(html, 'lxml')
+    if soup.body.text == 'DONE':
+        return 0
+    links = soup.find_all(class_='rls-info-container')
+    for link in links:
+
+        quality_block = link.find('div', class_='link-{}p'.format(quality))
+        _link = quality_block.find(title='Magnet Link')
+
+        title = '{} - {}'.format(show.get('title'), link.get('id'))
+
+        episode = Episode(title, _link.get('href'))
+        result.append(episode)
+    return result
+
+async def get_episodes(show, quality=1080):
     
     html = requests.get(ROOT_URL + show['href']).text
     soup = BeautifulSoup(html, 'lxml')
@@ -71,25 +101,14 @@ def get_episodes(show, quality=1080):
     script_block = main_div.find('script').text
     show_id = re.findall('\d+', script_block)[0]
 
-    next_iter = 0
     result = list()
+    next_iter = 0
     while True:
-        api = API_URL.format(show_id, next_iter)
-        html = requests.get(api).text
-        soup = BeautifulSoup(html, 'lxml')
-        if soup.body.text == 'DONE':
+        res = await fetch_links(show, show_id, next_iter)
+        if res == 0:
             return result
-        links = soup.find_all(class_='rls-info-container')
-        for link in links:
-
-            quality_block = link.find('div', class_='link-{}p'.format(quality))
-            _link = quality_block.find(title='Magnet Link')
-
-            title = '{} - {}'.format(show.get('title'), link.get('id'))
-
-            episode = Episode(title, _link.get('href'))
-            result.append(episode)
-
+        for ep in res:
+            result.append(ep)
         next_iter += 1
 
 
@@ -144,13 +163,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.loadingStatus.setVisible(False)
 
     def display_episodes(self):
-        thread = threading.Thread(target=self.display_episodes_thread)
+        thread = threading.Thread(target=self.display_episodes_thread_start)
         thread.start()
         self.loadingStatus.setVisible(True)
     
-    def display_episodes_thread(self):
+    def display_episodes_thread_start(self):
+        loop = asyncio.new_event_loop()
+        loop.run_until_complete(self.display_episodes_thread())
+
+    async def display_episodes_thread(self):
         selected_item = self.animeView.selectedItems()[0]
-        episodes = get_episodes(selected_item.show_link)
+        episodes = await get_episodes(selected_item.show_link)
         self.animeView.clear()
         for episode in episodes:
             self.animeView.addItem(episode)
