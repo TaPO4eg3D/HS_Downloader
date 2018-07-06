@@ -1,4 +1,5 @@
 import re
+import time
 import os, sys, subprocess, threading
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import *
@@ -149,11 +150,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.loadingStatus.setVisible(True)
     
     def display_episodes_thread(self):
+        start = time.time()
         selected_item = self.animeView.selectedItems()[0]
         episodes = get_episodes(selected_item.show_link)
         self.animeView.clear()
         for episode in episodes:
             self.animeView.addItem(episode)
+        print(time.time() - start)
         self.loadingStatus.setVisible(False)
     
     def download_selected(self):
