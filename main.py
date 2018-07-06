@@ -1,4 +1,5 @@
 import re
+import time
 import asyncio
 import aiohttp
 import os, sys, subprocess, threading
@@ -172,11 +173,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         loop.run_until_complete(self.display_episodes_thread())
 
     async def display_episodes_thread(self):
+        start = time.time()
         selected_item = self.animeView.selectedItems()[0]
         episodes = await get_episodes(selected_item.show_link)
         self.animeView.clear()
         for episode in episodes:
             self.animeView.addItem(episode)
+        print(time.time() - start)
         self.loadingStatus.setVisible(False)
     
     def download_selected(self):
