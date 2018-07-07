@@ -1,5 +1,7 @@
 import re
 import time
+import asyncio
+import aiohttp
 import os, sys, subprocess, threading
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import *
@@ -15,22 +17,24 @@ ROOT_URL = 'http://horriblesubs.info'
 ALL_SHOWS = ROOT_URL + '/shows/'
 API_URL = 'https://horriblesubs.info/api.php?method=getshows&type=show&showid={}&nextid={}'
 
+EPISODES = list()
+
 
 def open_magnet(magnet):
     """Open magnet according to os."""
     if sys.platform.startswith('linux'):
         subprocess.Popen(['xdg-open', magnet],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     elif sys.platform.startswith('win32'):
         os.startfile(magnet)
     elif sys.platform.startswith('cygwin'):
         os.startfile(magnet)
     elif sys.platform.startswith('darwin'):
         subprocess.Popen(['open', magnet],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         subprocess.Popen(['xdg-open', magnet],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
 class AnimeShow(QListWidgetItem):
@@ -64,6 +68,33 @@ class Episode(QListWidgetItem):
         return '{} - {}'.format(self.title, self.magnet)
 
 
+async def fetch_html(session, link):
+    async with session.get(link) as response:
+        return await response.text()
+
+
+async def fetch_links(show, show_id, next_iter, quality=1080):
+
+    async with aiohttp.ClientSession() as session:
+        api = API_URL.format(show_id, next_iter)
+        html = await fetch_html(session, api)
+
+    soup = BeautifulSoup(html, 'lxml')
+    if soup.body.text == 'DONE':
+        return
+
+    links = soup.find_all(class_='rls-info-container')
+    for link in links:
+
+        quality_block = link.find('div', class_='link-{}p'.format(quality))
+        _link = quality_block.find(title='Magnet Link')
+
+        title = '{} - {}'.format(show.get('title'), link.get('id'))
+
+        episode = Episode(title, _link.get('href'))
+        EPISODES.append(episode)
+
+
 def get_episodes(show, quality=1080):
     
     html = requests.get(ROOT_URL + show['href']).text
@@ -72,26 +103,17 @@ def get_episodes(show, quality=1080):
     script_block = main_div.find('script').text
     show_id = re.findall('\d+', script_block)[0]
 
-    next_iter = 0
-    result = list()
-    while True:
-        api = API_URL.format(show_id, next_iter)
-        html = requests.get(api).text
-        soup = BeautifulSoup(html, 'lxml')
-        if soup.body.text == 'DONE':
-            return result
-        links = soup.find_all(class_='rls-info-container')
-        for link in links:
+    EPISODES.clear()
+    tasks = list()
+    loop = asyncio.new_event_loop()
+    for iteration in range(12):
+        task = loop.create_task(fetch_links(show, show_id, iteration, quality))
+        tasks.append(task)
 
-            quality_block = link.find('div', class_='link-{}p'.format(quality))
-            _link = quality_block.find(title='Magnet Link')
+    wait_tasks = asyncio.wait(tasks)
+    loop.run_until_complete(wait_tasks)
 
-            title = '{} - {}'.format(show.get('title'), link.get('id'))
-
-            episode = Episode(title, _link.get('href'))
-            result.append(episode)
-
-        next_iter += 1
+    return sorted(EPISODES)
 
 
 def matched_shows(search):
@@ -148,7 +170,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         thread = threading.Thread(target=self.display_episodes_thread)
         thread.start()
         self.loadingStatus.setVisible(True)
-    
+
     def display_episodes_thread(self):
         start = time.time()
         selected_item = self.animeView.selectedItems()[0]
