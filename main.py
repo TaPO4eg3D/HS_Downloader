@@ -24,17 +24,17 @@ def open_magnet(magnet):
     """Open magnet according to os."""
     if sys.platform.startswith('linux'):
         subprocess.Popen(['xdg-open', magnet],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     elif sys.platform.startswith('win32'):
         os.startfile(magnet)
     elif sys.platform.startswith('cygwin'):
         os.startfile(magnet)
     elif sys.platform.startswith('darwin'):
         subprocess.Popen(['open', magnet],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         subprocess.Popen(['xdg-open', magnet],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
 class AnimeShow(QListWidgetItem):
@@ -82,6 +82,7 @@ async def fetch_links(show, show_id, next_iter, quality=1080):
     soup = BeautifulSoup(html, 'lxml')
     if soup.body.text == 'DONE':
         return
+
     links = soup.find_all(class_='rls-info-container')
     for link in links:
 
@@ -102,20 +103,17 @@ def get_episodes(show, quality=1080):
     script_block = main_div.find('script').text
     show_id = re.findall('\d+', script_block)[0]
 
-    # result = list()
-    # next_iter = 0
-
     EPISODES.clear()
     tasks = list()
     loop = asyncio.new_event_loop()
-    for iteration in range(2):
+    for iteration in range(12):
         task = loop.create_task(fetch_links(show, show_id, iteration, quality))
         tasks.append(task)
 
     wait_tasks = asyncio.wait(tasks)
     loop.run_until_complete(wait_tasks)
 
-    return EPISODES
+    return sorted(EPISODES)
 
 
 def matched_shows(search):
