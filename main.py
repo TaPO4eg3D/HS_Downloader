@@ -17,6 +17,8 @@ ROOT_URL = 'http://horriblesubs.info'
 ALL_SHOWS = ROOT_URL + '/shows/'
 API_URL = 'https://horriblesubs.info/api.php?method=getshows&type=show&showid={}&nextid={}'
 
+EPISODES = list()
+
 
 def open_magnet(magnet):
     """Open magnet according to os."""
@@ -73,15 +75,13 @@ async def fetch_html(session, link):
 
 async def fetch_links(show, show_id, next_iter, quality=1080):
 
-    result = list()
-
     async with aiohttp.ClientSession() as session:
         api = API_URL.format(show_id, next_iter)
         html = await fetch_html(session, api)
 
     soup = BeautifulSoup(html, 'lxml')
     if soup.body.text == 'DONE':
-        return 0
+        return
     links = soup.find_all(class_='rls-info-container')
     for link in links:
 
@@ -91,10 +91,10 @@ async def fetch_links(show, show_id, next_iter, quality=1080):
         title = '{} - {}'.format(show.get('title'), link.get('id'))
 
         episode = Episode(title, _link.get('href'))
-        result.append(episode)
-    return result
+        EPISODES.append(episode)
 
-async def get_episodes(show, quality=1080):
+
+def get_episodes(show, quality=1080):
     
     html = requests.get(ROOT_URL + show['href']).text
     soup = BeautifulSoup(html, 'lxml')
@@ -102,15 +102,20 @@ async def get_episodes(show, quality=1080):
     script_block = main_div.find('script').text
     show_id = re.findall('\d+', script_block)[0]
 
-    result = list()
-    next_iter = 0
-    while True:
-        res = await fetch_links(show, show_id, next_iter)
-        if res == 0:
-            return result
-        for ep in res:
-            result.append(ep)
-        next_iter += 1
+    # result = list()
+    # next_iter = 0
+
+    EPISODES.clear()
+    tasks = list()
+    loop = asyncio.new_event_loop()
+    for iteration in range(2):
+        task = loop.create_task(fetch_links(show, show_id, iteration, quality))
+        tasks.append(task)
+
+    wait_tasks = asyncio.wait(tasks)
+    loop.run_until_complete(wait_tasks)
+
+    return EPISODES
 
 
 def matched_shows(search):
@@ -164,18 +169,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.loadingStatus.setVisible(False)
 
     def display_episodes(self):
-        thread = threading.Thread(target=self.display_episodes_thread_start)
+        thread = threading.Thread(target=self.display_episodes_thread)
         thread.start()
         self.loadingStatus.setVisible(True)
-    
-    def display_episodes_thread_start(self):
-        loop = asyncio.new_event_loop()
-        loop.run_until_complete(self.display_episodes_thread())
 
-    async def display_episodes_thread(self):
+    def display_episodes_thread(self):
         start = time.time()
         selected_item = self.animeView.selectedItems()[0]
-        episodes = await get_episodes(selected_item.show_link)
+        episodes = get_episodes(selected_item.show_link)
         self.animeView.clear()
         for episode in episodes:
             self.animeView.addItem(episode)
