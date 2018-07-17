@@ -135,6 +135,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.loadingStatus.setVisible(False)
+        self.setFixedSize(self.size())
 
         self.animeView.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.animeView.doubleClicked.connect(self.display_episodes)
