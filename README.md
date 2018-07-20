@@ -22,7 +22,7 @@ Go to the "Releases" tab where you can get the latest version
 
 ### The checkbox "Is it a big anime?", what is that?
 
-By default HS:Downloader can parse only 144 episodes. It was made for performance perposes.
+By default HS:Downloader can parse only 144 episodes. It was made for performance purposes.
 If your anime show contains more than 144 episodes, select that option 
 
 **IMPORTANT:** before using this software make sure that you have a torrent client that supports magnet links
