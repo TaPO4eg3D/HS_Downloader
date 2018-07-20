@@ -15,10 +15,11 @@ from MainWindow import Ui_MainWindow
 
 ROOT_URL = 'http://horriblesubs.info'
 ALL_SHOWS = ROOT_URL + '/shows/'
-API_URL = 'https://horriblesubs.info/api.php?method=getshows&type=show&showid={}&nextid={}'
+API_URL = ROOT_URL + '/api.php?method=getshows&type=show&showid={}&nextid={}'
 
 EPISODES = list()
-
+QUALITIES = ['1080', '720', '480']
+SELECTED_SHOW = None
 
 def open_magnet(magnet):
     """Open magnet according to os."""
@@ -56,16 +57,18 @@ class AnimeShow(QListWidgetItem):
 
 class Episode(QListWidgetItem):
     
-    def __init__(self, title, magnet):
-        super().__init__(title)
+    def __init__(self, title, magnet, quality):
+        self.repr_string = '{} ({}p)'.format(title, quality)
+        super().__init__(self.repr_string)
         self.title = title
         self.magnet = magnet
+        self.quality = quality
     
     def __str__(self):
-        return '{} - {}'.format(self.title, self.magnet)
+        return self.repr_string
 
     def __repr__(self):
-        return '{} - {}'.format(self.title, self.magnet)
+        return self.repr_string
 
 
 async def fetch_html(session, link):
@@ -73,7 +76,7 @@ async def fetch_html(session, link):
         return await response.text()
 
 
-async def fetch_links(show, show_id, next_iter, quality=1080):
+async def fetch_links(show, show_id, next_iter, quality):
 
     async with aiohttp.ClientSession() as session:
         api = API_URL.format(show_id, next_iter)
@@ -91,11 +94,11 @@ async def fetch_links(show, show_id, next_iter, quality=1080):
 
         title = '{} - {}'.format(show.get('title'), link.get('id'))
 
-        episode = Episode(title, _link.get('href'))
+        episode = Episode(title, _link.get('href'), quality)
         EPISODES.append(episode)
 
 
-def get_episodes(show, quality=1080):
+def get_episodes(show, quality='1080'):
     
     html = requests.get(ROOT_URL + show['href']).text
     soup = BeautifulSoup(html, 'lxml')
@@ -136,12 +139,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.loadingStatus.setVisible(False)
         self.setFixedSize(self.size())
+        self.selectQuality.addItems(QUALITIES)
+        self.selectQuality.currentTextChanged.connect(self.quality_changed)
 
         self.animeView.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.animeView.doubleClicked.connect(self.display_episodes)
         self.searchField.installEventFilter(self)
         self.searchButton.clicked.connect(self.fill_table)
-        self.showEpisodes.clicked.connect(self.display_episodes)
+        #self.showEpisodes.clicked.connect(self.display_episodes)
         self.downloadButton.clicked.connect(self.download_selected)
         self.selectAll.clicked.connect(self.select_all)
         self.deselectAll.clicked.connect(self.deselect_all)
@@ -154,6 +159,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return QWidget.eventFilter(self, widget, event)
 
     def fill_table(self):
+        global SELECTED_SHOW
+        SELECTED_SHOW = None
         self.animeView.clear()
         thread = threading.Thread(target=self.fill_table_thread)
         thread.start()
@@ -173,14 +180,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.loadingStatus.setVisible(True)
 
     def display_episodes_thread(self):
+        
+        global SELECTED_SHOW
+
         start = time.time()
-        selected_item = self.animeView.selectedItems()[0]
-        episodes = get_episodes(selected_item.show_link)
+        selected_item = None
+        if(SELECTED_SHOW is None):
+            selected_item = self.animeView.selectedItems()[0]
+            SELECTED_SHOW = AnimeShow(selected_item.show_link, selected_item.title) # Save the selected show to the global scope
+        else:
+            selected_item = SELECTED_SHOW
+
+        selected_quality = self.selectQuality.currentText();
+        episodes = get_episodes(selected_item.show_link, selected_quality)
         self.animeView.clear()
         for episode in episodes:
             self.animeView.addItem(episode)
         print(time.time() - start)
         self.loadingStatus.setVisible(False)
+    
+    def quality_changed(self):
+        if(SELECTED_SHOW is None):
+            return
+        selected_quality = self.selectQuality.currentText();
+        self.animeView.clear()
+        self.display_episodes()
     
     def download_selected(self):
         items = self.animeView.selectedItems()

@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'MainWindow.ui',
 # licensing of 'MainWindow.ui' applies.
 #
-# Created: Mon Jul  2 19:40:25 2018
+# Created: Fri Jul 20 14:29:59 2018
 #      by: pyside2-uic  running on PySide2 5.11.1a1.dev1530005708
 #
 # WARNING! All changes made in this file will be lost!
@@ -33,9 +33,6 @@ class Ui_MainWindow(object):
         self.downloadButton = QtWidgets.QPushButton(self.centralwidget)
         self.downloadButton.setGeometry(QtCore.QRect(340, 220, 121, 31))
         self.downloadButton.setObjectName("downloadButton")
-        self.showEpisodes = QtWidgets.QPushButton(self.centralwidget)
-        self.showEpisodes.setGeometry(QtCore.QRect(340, 185, 121, 31))
-        self.showEpisodes.setObjectName("showEpisodes")
         self.animeView = QtWidgets.QListWidget(self.centralwidget)
         self.animeView.setGeometry(QtCore.QRect(10, 50, 321, 201))
         self.animeView.setObjectName("animeView")
@@ -53,6 +50,9 @@ class Ui_MainWindow(object):
         self.loadingStatus.setFont(font)
         self.loadingStatus.setAlignment(QtCore.Qt.AlignCenter)
         self.loadingStatus.setObjectName("loadingStatus")
+        self.selectQuality = QtWidgets.QComboBox(self.centralwidget)
+        self.selectQuality.setGeometry(QtCore.QRect(340, 190, 121, 22))
+        self.selectQuality.setObjectName("selectQuality")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -64,6 +64,5 @@ class Ui_MainWindow(object):
         self.selectAll.setText(QtWidgets.QApplication.translate("MainWindow", "Select all", None, -1))
         self.deselectAll.setText(QtWidgets.QApplication.translate("MainWindow", "Deselect all", None, -1))
         self.downloadButton.setText(QtWidgets.QApplication.translate("MainWindow", "Download", None, -1))
-        self.showEpisodes.setText(QtWidgets.QApplication.translate("MainWindow", "Display episodes", None, -1))
         self.loadingStatus.setText(QtWidgets.QApplication.translate("MainWindow", "Loading...", None, -1))
 

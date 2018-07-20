@@ -79,19 +79,6 @@
      <string>Download</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="showEpisodes">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>185</y>
-      <width>121</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Display episodes</string>
-    </property>
-   </widget>
    <widget class="QListWidget" name="animeView">
     <property name="geometry">
      <rect>
@@ -137,6 +124,16 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="selectQuality">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>190</y>
+      <width>121</width>
+      <height>22</height>
+     </rect>
     </property>
    </widget>
   </widget>
