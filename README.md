@@ -10,15 +10,20 @@ Go to the "Releases" tab where you can get the latest version
 
 * Type the name of an anime and hit Enter or the "Search" button
 
-    ![hs1](https://user-images.githubusercontent.com/12825777/42839079-c71affb4-8a2c-11e8-9a05-2ea3a99e44a5.png)
+    ![hs1](https://user-images.githubusercontent.com/12825777/43022809-aa76eed2-8c92-11e8-8429-aa75df5bd8b4.png)
 
-* Choose the anime that you want and double click on it or hit the "Display episodes" button
+* Choose the anime that you want and double click on it
 
-    ![hs2](https://user-images.githubusercontent.com/12825777/42839111-d72dcef4-8a2c-11e8-83df-9312c178eca9.png)
+    ![hs2](https://user-images.githubusercontent.com/12825777/43022810-aa9ec632-8c92-11e8-8e31-b256896b7457.png)
 
-* Select the needed episodes and hit the "Download" button
+* Select the needed episodes and hit the "Download" button. If you want to change a quality use the checkbox above the button.
 
-    ![hs3](https://user-images.githubusercontent.com/12825777/42839134-e7613220-8a2c-11e8-93b2-5e2890d87c09.png)
+    ![hs3](https://user-images.githubusercontent.com/12825777/43022811-aac5ca2a-8c92-11e8-8920-424fb7fa9cf9.png)
+
+### The checkbox "Is it a big anime?", what is that?
+
+By default HS:Downloader can parse only 144 episodes. It was made for performance perposes.
+If your anime show contains more than 144 episodes, select that option 
 
 **IMPORTANT:** before using this software make sure that you have a torrent client that supports magnet links
 
