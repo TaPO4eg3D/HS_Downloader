@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'MainWindow.ui',
 # licensing of 'MainWindow.ui' applies.
 #
-# Created: Fri Jul 20 14:29:59 2018
+# Created: Sat Jul 21 02:27:33 2018
 #      by: pyside2-uic  running on PySide2 5.11.1a1.dev1530005708
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,17 +13,17 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(475, 263)
+        MainWindow.resize(476, 263)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.searchButton = QtWidgets.QPushButton(self.centralwidget)
-        self.searchButton.setGeometry(QtCore.QRect(340, 10, 121, 31))
+        self.searchButton.setGeometry(QtCore.QRect(340, 10, 131, 31))
         self.searchButton.setObjectName("searchButton")
         self.selectAll = QtWidgets.QPushButton(self.centralwidget)
-        self.selectAll.setGeometry(QtCore.QRect(340, 55, 121, 31))
+        self.selectAll.setGeometry(QtCore.QRect(340, 55, 131, 31))
         self.selectAll.setObjectName("selectAll")
         self.deselectAll = QtWidgets.QPushButton(self.centralwidget)
-        self.deselectAll.setGeometry(QtCore.QRect(340, 90, 121, 31))
+        self.deselectAll.setGeometry(QtCore.QRect(340, 90, 131, 31))
         self.deselectAll.setObjectName("deselectAll")
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(340, 50, 118, 3))
@@ -31,7 +31,7 @@ class Ui_MainWindow(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.downloadButton = QtWidgets.QPushButton(self.centralwidget)
-        self.downloadButton.setGeometry(QtCore.QRect(340, 220, 121, 31))
+        self.downloadButton.setGeometry(QtCore.QRect(340, 220, 131, 31))
         self.downloadButton.setObjectName("downloadButton")
         self.animeView = QtWidgets.QListWidget(self.centralwidget)
         self.animeView.setGeometry(QtCore.QRect(10, 50, 321, 201))
@@ -41,7 +41,7 @@ class Ui_MainWindow(object):
         self.searchField.setObjectName("searchField")
         self.loadingStatus = QtWidgets.QLabel(self.centralwidget)
         self.loadingStatus.setEnabled(True)
-        self.loadingStatus.setGeometry(QtCore.QRect(340, 160, 121, 20))
+        self.loadingStatus.setGeometry(QtCore.QRect(340, 160, 131, 20))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(11)
@@ -51,8 +51,11 @@ class Ui_MainWindow(object):
         self.loadingStatus.setAlignment(QtCore.Qt.AlignCenter)
         self.loadingStatus.setObjectName("loadingStatus")
         self.selectQuality = QtWidgets.QComboBox(self.centralwidget)
-        self.selectQuality.setGeometry(QtCore.QRect(340, 190, 121, 22))
+        self.selectQuality.setGeometry(QtCore.QRect(340, 190, 131, 22))
         self.selectQuality.setObjectName("selectQuality")
+        self.intellTurn = QtWidgets.QCheckBox(self.centralwidget)
+        self.intellTurn.setGeometry(QtCore.QRect(340, 130, 131, 17))
+        self.intellTurn.setObjectName("intellTurn")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -65,4 +68,5 @@ class Ui_MainWindow(object):
         self.deselectAll.setText(QtWidgets.QApplication.translate("MainWindow", "Deselect all", None, -1))
         self.downloadButton.setText(QtWidgets.QApplication.translate("MainWindow", "Download", None, -1))
         self.loadingStatus.setText(QtWidgets.QApplication.translate("MainWindow", "Loading...", None, -1))
+        self.intellTurn.setText(QtWidgets.QApplication.translate("MainWindow", "Is it a big anime? >144", None, -1))
 

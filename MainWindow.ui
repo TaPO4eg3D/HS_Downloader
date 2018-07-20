@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>475</width>
+    <width>476</width>
     <height>263</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>340</x>
       <y>10</y>
-      <width>121</width>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
@@ -32,7 +32,7 @@
      <rect>
       <x>340</x>
       <y>55</y>
-      <width>121</width>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
@@ -45,7 +45,7 @@
      <rect>
       <x>340</x>
       <y>90</y>
-      <width>121</width>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
@@ -71,7 +71,7 @@
      <rect>
       <x>340</x>
       <y>220</y>
-      <width>121</width>
+      <width>131</width>
       <height>31</height>
      </rect>
     </property>
@@ -107,7 +107,7 @@
      <rect>
       <x>340</x>
       <y>160</y>
-      <width>121</width>
+      <width>131</width>
       <height>20</height>
      </rect>
     </property>
@@ -131,9 +131,22 @@
      <rect>
       <x>340</x>
       <y>190</y>
-      <width>121</width>
+      <width>131</width>
       <height>22</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="intellTurn">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>130</y>
+      <width>131</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Is it a big anime? &gt;144</string>
     </property>
    </widget>
   </widget>

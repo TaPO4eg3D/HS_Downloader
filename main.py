@@ -20,6 +20,7 @@ API_URL = ROOT_URL + '/api.php?method=getshows&type=show&showid={}&nextid={}'
 EPISODES = list()
 QUALITIES = ['1080', '720', '480']
 SELECTED_SHOW = None
+INTELL_PARSE = False
 
 def open_magnet(magnet):
     """Open magnet according to os."""
@@ -105,12 +106,14 @@ def get_episodes(show, quality='1080'):
     main_div = soup.find('div', class_='entry-content')
     script_block = main_div.find('script').text
     show_id = re.findall('\d+', script_block)[0]
-
-    api = API_URL.format(show_id, 0)
-    api_html = requests.get(api).text
-    api_soup = BeautifulSoup(api_html, 'lxml')
-    last_episode = int(api_soup.find('div', class_='rls-info-container').get('id'))
-    pages = int(last_episode/12) + 1
+    pages = 12
+    
+    if(INTELL_PARSE):
+        api = API_URL.format(show_id, 0)
+        api_html = requests.get(api).text
+        api_soup = BeautifulSoup(api_html, 'lxml')
+        last_episode = int(api_soup.find('div', class_='rls-info-container').get('id'))
+        pages = int(last_episode/12) + 1
 
     EPISODES.clear()
     tasks = list()
@@ -156,6 +159,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.downloadButton.clicked.connect(self.download_selected)
         self.selectAll.clicked.connect(self.select_all)
         self.deselectAll.clicked.connect(self.deselect_all)
+        self.intellTurn.stateChanged.connect(self.intellTurn_changed)
     
     def eventFilter(self, widget, event):
         if event.type() == QEvent.KeyPress and widget is self.searchField:
@@ -222,6 +226,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     def deselect_all(self):
         self.animeView.clearSelection()
+    
+    def intellTurn_changed(self):
+        global INTELL_PARSE
+        INTELL_PARSE = not INTELL_PARSE
 
 
 if __name__ == "__main__":
