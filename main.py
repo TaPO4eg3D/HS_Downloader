@@ -106,10 +106,16 @@ def get_episodes(show, quality='1080'):
     script_block = main_div.find('script').text
     show_id = re.findall('\d+', script_block)[0]
 
+    api = API_URL.format(show_id, 0)
+    api_html = requests.get(api).text
+    api_soup = BeautifulSoup(api_html, 'lxml')
+    last_episode = int(api_soup.find('div', class_='rls-info-container').get('id'))
+    pages = int(last_episode/12) + 1
+
     EPISODES.clear()
     tasks = list()
     loop = asyncio.new_event_loop()
-    for iteration in range(12):
+    for iteration in range(pages):
         task = loop.create_task(fetch_links(show, show_id, iteration, quality))
         tasks.append(task)
 
