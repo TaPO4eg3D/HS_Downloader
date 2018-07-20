@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'MainWindow.ui',
 # licensing of 'MainWindow.ui' applies.
 #
-# Created: Sat Jul 21 02:27:33 2018
+# Created: Sat Jul 21 02:53:14 2018
 #      by: pyside2-uic  running on PySide2 5.11.1a1.dev1530005708
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
         self.deselectAll.setGeometry(QtCore.QRect(340, 90, 131, 31))
         self.deselectAll.setObjectName("deselectAll")
         self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setGeometry(QtCore.QRect(340, 50, 118, 3))
+        self.line.setGeometry(QtCore.QRect(340, 35, 131, 31))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
