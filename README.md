@@ -4,7 +4,19 @@ This software allows you to quickly download multiple episodes of any anime from
 
 ### Where I can download it?
 
-Go to the "Releases" tab where you can get the latest version
+For Windows you can go to the "Releases" tab where you can get the latest version
+
+For Linux and Mac OS you can build it directly from source(Python 3.6+ is needed):
+
+```bash
+git clone https://github.com/TaPO4eg3D/HS_Downloader.git
+cd HS_Downloader
+pip install virtualenv # install virtualenv
+virtualenv env # create virtual environment
+source env/bin/activate # activate it
+pip intall -r requirements.txt # install all dependencies
+python main.py
+```
 
 ### How to use it?
 
