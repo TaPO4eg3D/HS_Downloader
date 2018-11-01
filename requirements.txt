@@ -9,6 +9,6 @@ idna==2.7
 lxml==4.2.4
 multidict==4.3.1
 PySide2==5.11.1
-requests==2.19.1
+requests>=2.20.0
 urllib3==1.23
 yarl==1.2.6
