@@ -155,7 +155,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.animeView.doubleClicked.connect(self.display_episodes)
         self.searchField.installEventFilter(self)
         self.searchButton.clicked.connect(self.fill_table)
-        #self.showEpisodes.clicked.connect(self.display_episodes)
         self.downloadButton.clicked.connect(self.download_selected)
         self.selectAll.clicked.connect(self.select_all)
         self.deselectAll.clicked.connect(self.deselect_all)
@@ -201,7 +200,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             selected_item = SELECTED_SHOW
 
-        selected_quality = self.selectQuality.currentText();
+        selected_quality = self.selectQuality.currentText()
         episodes = get_episodes(selected_item.show_link, selected_quality)
         self.animeView.clear()
         for episode in episodes:
@@ -212,7 +211,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def quality_changed(self):
         if(SELECTED_SHOW is None):
             return
-        selected_quality = self.selectQuality.currentText();
+        selected_quality = self.selectQuality.currentText()
         self.animeView.clear()
         self.display_episodes()
     
