@@ -14,7 +14,7 @@ cd HS_Downloader
 pip install virtualenv # install virtualenv
 virtualenv env # create virtual environment
 source env/bin/activate # activate it
-pip intall -r requirements.txt # install all dependencies
+pip install -r requirements.txt # install all dependencies
 python main.py
 ```
 
