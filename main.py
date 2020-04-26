@@ -104,11 +104,15 @@ def get_episodes(show, quality='1080'):
     html = requests.get(ROOT_URL + show['href']).text
     soup = BeautifulSoup(html, 'lxml')
     main_div = soup.find('div', class_='entry-content')
-    script_block = main_div.find('script').text
-    show_id = re.findall('\d+', script_block)[0]
+
+    script_block = getattr(main_div, 'script', None)
+    if not script_block:
+        raise Exception('Something nasty happened, please contact the developer!')
+
+    show_id = re.findall(r'\d+', script_block.string)[0]
     pages = 12
     
-    if(INTELL_PARSE):
+    if INTELL_PARSE:
         api = API_URL.format(show_id, 0)
         api_html = requests.get(api).text
         api_soup = BeautifulSoup(api_html, 'lxml')
