@@ -1,14 +1,15 @@
-import re
-import time
 import asyncio
-import aiohttp
-import os, sys, subprocess, threading
-from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import *
-from PySide2.QtCore import *
-from PySide2.QtXml import QDomNode
+import os
+import re
+import subprocess
+import sys
+import threading
+import time
 
+import aiohttp
 import requests
+from PySide2.QtCore import *
+from PySide2.QtWidgets import *
 from bs4 import BeautifulSoup
 
 from MainWindow import Ui_MainWindow
@@ -21,6 +22,7 @@ EPISODES = list()
 QUALITIES = ['1080', '720', '480']
 SELECTED_SHOW = None
 INTELL_PARSE = False
+
 
 def open_magnet(magnet):
     """Open magnet according to os."""
@@ -40,13 +42,13 @@ def open_magnet(magnet):
 
 
 class AnimeShow(QListWidgetItem):
-    
+
     def __init__(self, show_link, title):
         super().__init__(title)
         self.show_link = show_link
         self.title = title
 
-    def setText(self):
+    def setText(self, **kwargs):
         return self.title
 
     def __str__(self):
@@ -57,14 +59,14 @@ class AnimeShow(QListWidgetItem):
 
 
 class Episode(QListWidgetItem):
-    
+
     def __init__(self, title, magnet, quality):
         self.repr_string = '{} ({}p)'.format(title, quality)
         super().__init__(self.repr_string)
         self.title = title
         self.magnet = magnet
         self.quality = quality
-    
+
     def __str__(self):
         return self.repr_string
 
@@ -78,7 +80,6 @@ async def fetch_html(session, link):
 
 
 async def fetch_links(show, show_id, next_iter, quality):
-
     async with aiohttp.ClientSession() as session:
         api = API_URL.format(show_id, next_iter)
         html = await fetch_html(session, api)
@@ -89,7 +90,6 @@ async def fetch_links(show, show_id, next_iter, quality):
 
     links = soup.find_all(class_='rls-info-container')
     for link in links:
-
         quality_block = link.find('div', class_='link-{}p'.format(quality))
         _link = quality_block.find(title='Magnet Link')
 
@@ -100,7 +100,6 @@ async def fetch_links(show, show_id, next_iter, quality):
 
 
 def get_episodes(show, quality='1080'):
-    
     html = requests.get(ROOT_URL + show['href']).text
     soup = BeautifulSoup(html, 'lxml')
     main_div = soup.find('div', class_='entry-content')
@@ -111,13 +110,13 @@ def get_episodes(show, quality='1080'):
 
     show_id = re.findall(r'\d+', script_block.string)[0]
     pages = 12
-    
+
     if INTELL_PARSE:
         api = API_URL.format(show_id, 0)
         api_html = requests.get(api).text
         api_soup = BeautifulSoup(api_html, 'lxml')
         last_episode = int(api_soup.find('div', class_='rls-info-container').get('id'))
-        pages = int(last_episode/12) + 1
+        pages = int(last_episode / 12) + 1
 
     EPISODES.clear()
     tasks = list()
@@ -135,7 +134,7 @@ def get_episodes(show, quality='1080'):
 def matched_shows(search):
     html = requests.get(ALL_SHOWS).text
     soup = BeautifulSoup(html, 'lxml')
-    
+
     main_div = soup.find('div', class_='post-inner-content')
     _matched_shows = main_div.find_all('a', title=re.compile('(?i){}'.format(search)))
     result = list()
@@ -146,7 +145,7 @@ def matched_shows(search):
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -163,7 +162,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.selectAll.clicked.connect(self.select_all)
         self.deselectAll.clicked.connect(self.deselect_all)
         self.intellTurn.stateChanged.connect(self.intellTurn_changed)
-    
+
     def eventFilter(self, widget, event):
         if event.type() == QEvent.KeyPress and widget is self.searchField:
             key = event.key()
@@ -178,7 +177,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         thread = threading.Thread(target=self.fill_table_thread)
         thread.start()
         self.loadingStatus.setVisible(True)
-    
+
     def fill_table_thread(self):
         if self.searchField.text() == '':
             return
@@ -193,14 +192,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.loadingStatus.setVisible(True)
 
     def display_episodes_thread(self):
-        
+
         global SELECTED_SHOW
 
         start = time.time()
-        selected_item = None
-        if(SELECTED_SHOW is None):
+        if SELECTED_SHOW is None:
             selected_item = self.animeView.selectedItems()[0]
-            SELECTED_SHOW = AnimeShow(selected_item.show_link, selected_item.title) # Save the selected show to the global scope
+            SELECTED_SHOW = AnimeShow(selected_item.show_link,
+                                      selected_item.title)  # Save the selected show to the global scope
         else:
             selected_item = SELECTED_SHOW
 
@@ -211,25 +210,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.animeView.addItem(episode)
         print(time.time() - start)
         self.loadingStatus.setVisible(False)
-    
+
     def quality_changed(self):
-        if(SELECTED_SHOW is None):
+        if SELECTED_SHOW is None:
             return
-        selected_quality = self.selectQuality.currentText()
+
         self.animeView.clear()
         self.display_episodes()
-    
+
     def download_selected(self):
         items = self.animeView.selectedItems()
         for item in items:
             open_magnet(item.magnet)
-    
+
     def select_all(self):
         self.animeView.selectAll()
-    
+
     def deselect_all(self):
         self.animeView.clearSelection()
-    
+
     def intellTurn_changed(self):
         global INTELL_PARSE
         INTELL_PARSE = not INTELL_PARSE
