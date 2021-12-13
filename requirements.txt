@@ -6,7 +6,7 @@ bs4==0.0.1
 certifi==2020.4.5.1
 chardet==3.0.4
 idna==2.9
-lxml==4.6.3
+lxml==4.6.5
 multidict==4.7.5
 PySide2==5.14.2.1
 requests==2.23.0
